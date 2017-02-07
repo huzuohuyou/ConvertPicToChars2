@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -13,35 +15,45 @@ namespace ConvertPicToChars2
     {
         Bitmap bitmap;
         string curFileName;
+        int step = 5;
+        int max = 0;
+        int level = 0;
+        char[] array = { '#','@','X', 'B','A',
+                         'G','5','A', 'R','9',
+                         '3','S','2', 'd','h',
+                         'i','&','x', 's','r',
+                         'm','z',';', ':','.',
+                         ' ' };
+        private int i;
+
         public Form1()
         {
             InitializeComponent();
             button1.Click += open_Click;
-            button2.Click += save_Click;
+            button2.Click += convert_Click;
             button3.Click += close_Click;
+            button4.Click += output_Click;
         }
 
         void Convert(string path)
         {
             bitmap = new Bitmap(path);
+            Convert(bitmap);
+        }
 
+        void Convert(Bitmap bitmap)
+        {
             //定义锁定bitmap的rect的指定范围区域
             Rectangle rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
-
             //加锁区域像素
             var bitmapData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, bitmap.PixelFormat);
-
             //位图的首地址
             var ptr = bitmapData.Scan0;
-
             //stride：扫描行
             int len = bitmapData.Stride * bitmap.Height;
-
             var bytes = new byte[len];
-
             //锁定区域的像素值copy到byte数组中
             Marshal.Copy(ptr, bytes, 0, len);
-
             for (int i = 0; i < bitmap.Height; i++)
             {
                 for (int j = 0; j < bitmap.Width * 3; j = j + 3)
@@ -61,9 +73,116 @@ namespace ConvertPicToChars2
 
             //解锁
             bitmap.UnlockBits(bitmapData);
-
-            
         }
+
+        void Convert2(Bitmap bitmap)
+        {
+            for (int i = 0; i < bitmap.Width; i++)
+            {
+                for (int j = 0; j < bitmap.Height; j++)
+                {
+                    //读取当前像素的RGB颜色值
+                    Color curColor = bitmap.GetPixel(i, j);
+                    //利用公式计算灰度值（加权平均法）
+                    int ret = (int)(curColor.R * 0.299 + curColor.G * 0.587 + curColor.B * 0.114);
+                    //设置该点像素的灰度值，R=G=B=ret
+                    bitmap.SetPixel(i, j, Color.FromArgb(ret, ret, ret));
+                }
+            }
+        }
+
+        void GetMax() {
+            if (bitmap == null)
+            {
+                throw new Exception("no bitmap exist!");
+            }
+            for (int i = 0; i < bitmap.Width; i++)
+            {
+                for (int j = 0; j < bitmap.Height; j++)
+                {
+                    Color c = bitmap.GetPixel(i, j);
+                    
+                    if (((c.R + c.G + c.B) / 3) > max)
+                    {
+                        max = ((c.R + c.G + c.B) / 3);
+                    }
+                }
+            }
+            GetLevel();
+        }
+
+        void GetLevel()
+        {
+            level = max / 26;
+            // level = 10;
+        }
+
+        char GetChar(int b)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (b >= i * level && (i + 1) * level > b)
+                {
+                    return array[i];
+                }
+            }
+            return ' ';
+        }
+
+        int GetAvg(int x, int y)
+        {
+            if (bitmap == null)
+            {
+                throw new Exception("no bitmap exist!");
+            }
+            int sum = 0;
+            for (int i = 0; i < step; i++)
+            {
+                for (int j = 0; j < step; j++)
+                {
+                    if (x + i >= bitmap.Width || y + j >= bitmap.Height)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        Color c = bitmap.GetPixel(x + i, y + j);
+                        sum += (c.R + c.G + c.B) / 3;
+                    }
+                }
+            }
+            return sum / (step*step);
+        }
+
+        public void Write(string content)
+        {
+            FileStream fs = new FileStream(string.Format("{0}\\temp.txt", Application.StartupPath), FileMode.Create);
+            StreamWriter sw = new StreamWriter(fs);
+            //开始写入
+            sw.WriteLine(content);
+            //清空缓冲区
+            sw.Flush();
+            //关闭流
+            sw.Close();
+            fs.Close();
+        }
+
+        private void output_Click(object sender, EventArgs e)
+        {
+            string content = string.Empty;
+            for (int j = 0; j < bitmap.Height; j += step)
+            {
+                for (int i = 0; i < bitmap.Width; i += step)
+                {
+                    char x = GetChar(GetAvg(i, j));
+                    content += x;
+                }
+                content += "\r\n";
+            }
+            Write(content);
+            Process.Start(string.Format("{0}\\temp.txt", Application.StartupPath));
+        }
+
         //打开图像
         private void open_Click(object sender, EventArgs e)
         {
@@ -80,8 +199,8 @@ namespace ConvertPicToChars2
                 curFileName = opnDlg.FileName;
                 try
                 {
-                    Convert(curFileName);
-                    //curBitmap = (Bitmap)Image.FromFile(curFileName);//使用Image.FromFile创建图像对象
+                    bitmap = new Bitmap(curFileName);
+                    pb_origin.Image = bitmap;// new Bitmap(curFileName); ;
                 }
                 catch (Exception exp)
                 {
@@ -92,95 +211,32 @@ namespace ConvertPicToChars2
             Invalidate();//对窗体进行重新绘制,这将强制执行Paint事件处理程序
         }
 
-        private void save_Click(object sender, EventArgs e)
+        private void convert_Click(object sender, EventArgs e)
         {
-            //bitmap.Save(Environment.CurrentDirectory + "//3.jpg");
             if (bitmap == null)
             {
                 return;
             }
-            SaveFileDialog saveDlg = new SaveFileDialog();
-            saveDlg.Title = "保存为";
-            saveDlg.OverwritePrompt = true;
-            saveDlg.Filter =
-                //"BMP文件 (*.bmp) | *.bmp|" +
-                //"Gif文件 (*.gif) | *.gif|" +
-                //"JPEG文件 (*.jpg) | *.jpg|" +
-                "PNG文件 (*.png) | *.png";
-            saveDlg.ShowHelp = true;
-            if (saveDlg.ShowDialog() == DialogResult.OK)
+            Convert2(bitmap);
+            string fileName = Application.StartupPath + "\\temp.Png";
+            string strFilExtn = fileName.Remove(0, fileName.Length - 3);
+            switch (strFilExtn)
             {
-                string fileName = saveDlg.FileName;
-                string strFilExtn = fileName.Remove(0, fileName.Length - 3);
-                switch (strFilExtn)
-                {
-                    //case "bmp":
-                    //    bitmap.Save(fileName, System.Drawing.Imaging.ImageFormat.Bmp);
-                    //    break;
-                    //case "jpg":
-                    //    bitmap.Save(fileName, System.Drawing.Imaging.ImageFormat.Jpeg);
-                    //    break;
-                    //case "gif":
-                    //    bitmap.Save(fileName, System.Drawing.Imaging.ImageFormat.Gif);
-                    //    break;
-                    //case "tif":
-                    //    bitmap.Save(fileName, System.Drawing.Imaging.ImageFormat.Tiff);
-                    //    break;
-                    case "png":
-                        bitmap.Save(fileName, System.Drawing.Imaging.ImageFormat.Png);
-                        break;
-                    default:
-                        break;
-                }
+                case "png":
+                    bitmap.Save(fileName, System.Drawing.Imaging.ImageFormat.Png);
+                    break;
+                default:
+                    break;
             }
+            pbconverted.Image = bitmap;
+            GetMax();
         }
 
         private void close_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-        /// <summary>
-        /// 当一个应用程序需要进行绘制时，他必须通过Graphics对象来执行绘制操作
-        /// 获取Graphics对象的方法有好几种，这里我们使用窗体Paint事件的PaintEventArgs属性来获取一个与窗体相关联的Graphics对象
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Form1_Paint(object sender, PaintEventArgs e)
-        {
-            Graphics g = e.Graphics;//获取Graphics对象
-            if (bitmap != null)
-            {
-                g.DrawImage(bitmap, 160, 20, bitmap.Width, bitmap.Height);//使用DrawImage方法绘制图像
-            }
-        }
-        /// <summary>
-        /// 提取灰度法
-        /// 为了将位图的颜色设置为灰度或其他颜色，需要使用GetPixel来读取当前像素的颜色--->计算灰度值--->使用SetPixel应用新的颜色
-        /// </summary>
-        private void pixel_Click(object sender, EventArgs e)
-        {
-            if (bitmap != null)
-            {
-               
-                Color curColor;
-                int ret;
-                //二维图像数组循环  
-                for (int i = 0; i < bitmap.Width; i++)
-                {
-                    for (int j = 0; j < bitmap.Height; j++)
-                    {
-                        //读取当前像素的RGB颜色值
-                        curColor = bitmap.GetPixel(i, j);
-                        //利用公式计算灰度值（加权平均法）
-                        ret = (int)(curColor.R * 0.299 + curColor.G * 0.587 + curColor.B * 0.114);
-                        //设置该点像素的灰度值，R=G=B=ret
-                        bitmap.SetPixel(i, j, Color.FromArgb(ret, ret, ret));
-                    }
-                }
-               
-                //使控件的整个图面无效并导致重绘控件
-                Invalidate();//对窗体进行重新绘制,这将强制执行Paint事件处理程序
-            }
-        }
+
+       
     }
 }

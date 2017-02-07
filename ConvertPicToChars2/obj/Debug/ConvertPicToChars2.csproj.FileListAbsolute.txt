@@ -1,9 +1,9 @@
 D:\GitHub\ConvertPicToChars2\ConvertPicToChars2\bin\Debug\ConvertPicToChars2.exe.config
 D:\GitHub\ConvertPicToChars2\ConvertPicToChars2\bin\Debug\ConvertPicToChars2.exe
 D:\GitHub\ConvertPicToChars2\ConvertPicToChars2\bin\Debug\ConvertPicToChars2.pdb
-D:\GitHub\ConvertPicToChars2\ConvertPicToChars2\obj\Debug\ConvertPicToChars2.csprojResolveAssemblyReference.cache
 D:\GitHub\ConvertPicToChars2\ConvertPicToChars2\obj\Debug\ConvertPicToChars2.Form1.resources
 D:\GitHub\ConvertPicToChars2\ConvertPicToChars2\obj\Debug\ConvertPicToChars2.Properties.Resources.resources
 D:\GitHub\ConvertPicToChars2\ConvertPicToChars2\obj\Debug\ConvertPicToChars2.csproj.GenerateResource.Cache
 D:\GitHub\ConvertPicToChars2\ConvertPicToChars2\obj\Debug\ConvertPicToChars2.exe
 D:\GitHub\ConvertPicToChars2\ConvertPicToChars2\obj\Debug\ConvertPicToChars2.pdb
+D:\GitHub\ConvertPicToChars2\ConvertPicToChars2\obj\Debug\ConvertPicToChars2.csprojResolveAssemblyReference.cache
