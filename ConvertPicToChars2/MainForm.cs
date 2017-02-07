@@ -8,16 +8,18 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 namespace ConvertPicToChars2
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         Bitmap bitmap;
         string curFileName;
         int step = 5;
         int max = 0;
         int level = 0;
+        string imagesDir = Application.StartupPath + "\\frames";
         char[] array =
             //{ '#','M','X', 'B','A',
             //             'G','H','A', 'R','K',
@@ -27,53 +29,71 @@ namespace ConvertPicToChars2
             //             ' ' };
          { '#','&','$', '*','o','!',';',' ' };
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
             button1.Click += open_Click;
             button2.Click += convert_Click;
             button3.Click += close_Click;
             button4.Click += output_Click;
+            button5.Click += gif_Click;
+            button6.Click += run_Click;
+            button7.Click += show_Click;
+        }
+
+        public delegate void InitItemInvoke(string str);
+
+        void run_Click(object sender, EventArgs e)
+        {
+            Thread thread = new Thread(new ThreadStart(DoWord));
+            thread.Start();
+        }
+
+        private void DoWord()
+        {
+            InitItemInvoke mi = new InitItemInvoke(SetImage);
+            DirectoryInfo di = new DirectoryInfo(imagesDir);
+            FileInfo[] fi = di.GetFiles();
+            foreach (FileInfo item in fi)
+            {
+                BeginInvoke(mi, new object[] { item.FullName });
+            }
+            
+        }
+
+        private void SetImage(string str)
+        {
+            pbconverted.Image = null;
+            bitmap = new Bitmap(str);
+            GetMax();
+            pbconverted.Image = bitmap;
+            Convert2(bitmap);
+            richTextBox1.Text = GetContent();
+        }
+
+        void show_Click(object sender, EventArgs e) {
+            richTextBox1.Text = GetContent();
+        }
+        void gif_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog opnDlg = new OpenFileDialog();//创建OpenFileDialog对象
+            //为图像选择一个筛选器
+            opnDlg.Filter = "gif|*.gif";
+            opnDlg.Title = "打开gif文件";
+            opnDlg.ShowHelp = true;//启动帮助按钮
+            if (opnDlg.ShowDialog() == DialogResult.OK)
+            {
+                curFileName = opnDlg.FileName;
+                bitmap = new Bitmap(curFileName);
+                pb_origin.Image = bitmap;
+                ImageHelper.GetFrames(curFileName, imagesDir);
+            }
         }
 
         void Convert(string path)
         {
             bitmap = new Bitmap(path);
-            Convert(bitmap);
-        }
-
-        void Convert(Bitmap bitmap)
-        {
-            //定义锁定bitmap的rect的指定范围区域
-            Rectangle rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
-            //加锁区域像素
-            var bitmapData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, bitmap.PixelFormat);
-            //位图的首地址
-            var ptr = bitmapData.Scan0;
-            //stride：扫描行
-            int len = bitmapData.Stride * bitmap.Height;
-            var bytes = new byte[len];
-            //锁定区域的像素值copy到byte数组中
-            Marshal.Copy(ptr, bytes, 0, len);
-            for (int i = 0; i < bitmap.Height; i++)
-            {
-                for (int j = 0; j < bitmap.Width * 3; j = j + 3)
-                {
-                    var color = bytes[i * bitmapData.Stride + j + 2] * 0.299
-                          + bytes[i * bitmapData.Stride + j + 1] * 0.597
-                          + bytes[i * bitmapData.Stride + j] * 0.114;
-
-                    bytes[i * bitmapData.Stride + j]
-                         = bytes[i * bitmapData.Stride + j + 1]
-                         = bytes[i * bitmapData.Stride + j + 2] = (byte)color;
-                }
-            }
-
-            //copy回位图
-            Marshal.Copy(bytes, 0, ptr, len);
-
-            //解锁
-            bitmap.UnlockBits(bitmapData);
+            Convert2(bitmap);
         }
 
         void Convert2(Bitmap bitmap)
@@ -92,7 +112,8 @@ namespace ConvertPicToChars2
             }
         }
 
-        void GetMax() {
+        void GetMax()
+        {
             if (bitmap == null)
             {
                 throw new Exception("no bitmap exist!");
@@ -102,7 +123,7 @@ namespace ConvertPicToChars2
                 for (int j = 0; j < bitmap.Height; j++)
                 {
                     Color c = bitmap.GetPixel(i, j);
-                    
+
                     if (((c.R + c.G + c.B) / 3) > max)
                     {
                         max = ((c.R + c.G + c.B) / 3);
@@ -157,7 +178,7 @@ namespace ConvertPicToChars2
 
         public void Write(string content)
         {
-            FileStream fs = new FileStream(string.Format("{0}\\temp.txt", Application.StartupPath), FileMode.Create);
+            FileStream fs = new FileStream(string.Format("{0}\\temp.txt", Application.StartupPath), FileMode.OpenOrCreate);
             StreamWriter sw = new StreamWriter(fs);
             //开始写入
             sw.WriteLine(content);
@@ -168,25 +189,32 @@ namespace ConvertPicToChars2
             fs.Close();
         }
 
-        private void output_Click(object sender, EventArgs e)
+        string GetContent()
         {
+            if (bitmap == null)
+            {
+                throw new Exception("no bitmap exist!");
+            }
             string content = string.Empty;
             for (int j = 0; j < bitmap.Height; j += step)
             {
                 for (int i = 0; i < bitmap.Width; i += step)
                 {
                     char x = GetChar(GetAvg(i, j));
-                    content += x;
+                    content += x + " ";
                 }
                 content += "\r\n";
             }
-            Write(content);
+            return content;
+        }
+
+        private void output_Click(object sender, EventArgs e)
+        {
+            Write(GetContent());
             Process.Start(string.Format("{0}\\temp.txt", Application.StartupPath));
         }
 
-        //打开图像
-        private void open_Click(object sender, EventArgs e)
-        {
+        void Open() {
             OpenFileDialog opnDlg = new OpenFileDialog();//创建OpenFileDialog对象
             //为图像选择一个筛选器
             opnDlg.Filter = "所有图像文件 | *.bmp; *.pcx; *.png; *.jpg; *.gif;" +
@@ -208,8 +236,13 @@ namespace ConvertPicToChars2
                     MessageBox.Show(exp.Message);
                 }
             }
-            //使控件的整个图面无效并导致重绘控件
-            Invalidate();//对窗体进行重新绘制,这将强制执行Paint事件处理程序
+        }
+
+        //打开图像
+        private void open_Click(object sender, EventArgs e)
+        {
+
+            Open();
         }
 
         private void convert_Click(object sender, EventArgs e)

@@ -1,6 +1,6 @@
 ﻿namespace ConvertPicToChars2
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,12 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.button6 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.pb_origin = new System.Windows.Forms.PictureBox();
             this.pbconverted = new System.Windows.Forms.PictureBox();
@@ -51,6 +55,8 @@
             // 
             // button1
             // 
+            this.button1.Font = new System.Drawing.Font("SimSun", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button1.ForeColor = System.Drawing.Color.Brown;
             this.button1.Location = new System.Drawing.Point(9, 7);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
@@ -60,7 +66,9 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(100, 7);
+            this.button2.Font = new System.Drawing.Font("SimSun", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button2.ForeColor = System.Drawing.Color.Brown;
+            this.button2.Location = new System.Drawing.Point(90, 7);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 0;
@@ -69,7 +77,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(191, 7);
+            this.button3.Location = new System.Drawing.Point(495, 7);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 0;
@@ -78,7 +86,9 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(282, 7);
+            this.button4.Font = new System.Drawing.Font("SimSun", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button4.ForeColor = System.Drawing.Color.Brown;
+            this.button4.Location = new System.Drawing.Point(171, 7);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 1;
@@ -94,6 +104,9 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.button6);
+            this.splitContainer1.Panel1.Controls.Add(this.button5);
+            this.splitContainer1.Panel1.Controls.Add(this.button7);
             this.splitContainer1.Panel1.Controls.Add(this.button4);
             this.splitContainer1.Panel1.Controls.Add(this.button1);
             this.splitContainer1.Panel1.Controls.Add(this.button3);
@@ -101,14 +114,56 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.richTextBox1);
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(953, 490);
-            this.splitContainer1.SplitterDistance = 33;
+            this.splitContainer1.Size = new System.Drawing.Size(1272, 703);
+            this.splitContainer1.SplitterDistance = 47;
             this.splitContainer1.TabIndex = 2;
+            // 
+            // button6
+            // 
+            this.button6.Font = new System.Drawing.Font("SimSun", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button6.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.button6.Location = new System.Drawing.Point(414, 7);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(75, 23);
+            this.button6.TabIndex = 1;
+            this.button6.Text = "run";
+            this.button6.UseVisualStyleBackColor = true;
+            // 
+            // button5
+            // 
+            this.button5.Font = new System.Drawing.Font("SimSun", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button5.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.button5.Location = new System.Drawing.Point(333, 7);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 1;
+            this.button5.Text = "open gif ";
+            this.button5.UseVisualStyleBackColor = true;
+            // 
+            // button7
+            // 
+            this.button7.Font = new System.Drawing.Font("SimSun", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button7.ForeColor = System.Drawing.Color.Brown;
+            this.button7.Location = new System.Drawing.Point(252, 7);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(75, 23);
+            this.button7.TabIndex = 1;
+            this.button7.Text = "show";
+            this.button7.UseVisualStyleBackColor = true;
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Font = new System.Drawing.Font("YouYuan", 5.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.richTextBox1.Location = new System.Drawing.Point(470, 0);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(799, 640);
+            this.richTextBox1.TabIndex = 1;
+            this.richTextBox1.Text = "";
             // 
             // splitContainer2
             // 
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer2.Location = new System.Drawing.Point(0, 0);
             this.splitContainer2.Name = "splitContainer2";
             // 
@@ -119,37 +174,41 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.pbconverted);
-            this.splitContainer2.Size = new System.Drawing.Size(953, 453);
-            this.splitContainer2.SplitterDistance = 475;
+            this.splitContainer2.Size = new System.Drawing.Size(464, 241);
+            this.splitContainer2.SplitterDistance = 231;
             this.splitContainer2.TabIndex = 0;
             // 
             // pb_origin
             // 
+            this.pb_origin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pb_origin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pb_origin.Location = new System.Drawing.Point(0, 0);
             this.pb_origin.Name = "pb_origin";
-            this.pb_origin.Size = new System.Drawing.Size(475, 453);
+            this.pb_origin.Size = new System.Drawing.Size(231, 241);
+            this.pb_origin.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pb_origin.TabIndex = 0;
             this.pb_origin.TabStop = false;
             // 
             // pbconverted
             // 
+            this.pbconverted.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pbconverted.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pbconverted.Location = new System.Drawing.Point(0, 0);
             this.pbconverted.Name = "pbconverted";
-            this.pbconverted.Size = new System.Drawing.Size(474, 453);
+            this.pbconverted.Size = new System.Drawing.Size(229, 241);
+            this.pbconverted.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbconverted.TabIndex = 0;
             this.pbconverted.TabStop = false;
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(953, 490);
+            this.ClientSize = new System.Drawing.Size(1272, 703);
             this.Controls.Add(this.splitContainer1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ConvertPicToChar2";
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -176,6 +235,10 @@
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.PictureBox pb_origin;
         private System.Windows.Forms.PictureBox pbconverted;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Button button7;
     }
 }
 
