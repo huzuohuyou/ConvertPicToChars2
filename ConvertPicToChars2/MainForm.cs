@@ -51,6 +51,7 @@ namespace ConvertPicToChars2
 
         private void DoWord()
         {
+            Thread.Sleep(41);
             InitItemInvoke mi = new InitItemInvoke(SetImage);
             DirectoryInfo di = new DirectoryInfo(imagesDir);
             FileInfo[] fi = di.GetFiles();
@@ -64,15 +65,15 @@ namespace ConvertPicToChars2
         private void SetImage(string str)
         {
             pbconverted.Image = null;
-            bitmap = new Bitmap(str);
-            GetMax();
+            Bitmap bitmap = new Bitmap(str);
+            GetMax(bitmap);
             pbconverted.Image = bitmap;
-            Convert2(bitmap);
-            richTextBox1.Text = GetContent();
+            bitmap = Convert2(bitmap);
+            richTextBox1.Text = GetContent(bitmap);
         }
 
         void show_Click(object sender, EventArgs e) {
-            richTextBox1.Text = GetContent();
+            richTextBox1.Text = GetContent(this.bitmap);
         }
         void gif_Click(object sender, EventArgs e)
         {
@@ -96,7 +97,7 @@ namespace ConvertPicToChars2
             Convert2(bitmap);
         }
 
-        void Convert2(Bitmap bitmap)
+        Bitmap Convert2(Bitmap bitmap)
         {
             for (int i = 0; i < bitmap.Width; i++)
             {
@@ -110,9 +111,10 @@ namespace ConvertPicToChars2
                     bitmap.SetPixel(i, j, Color.FromArgb(ret, ret, ret));
                 }
             }
+            return bitmap;
         }
 
-        void GetMax()
+        void GetMax(Bitmap bitmap)
         {
             if (bitmap == null)
             {
@@ -131,6 +133,11 @@ namespace ConvertPicToChars2
                 }
             }
             GetLevel();
+        }
+
+        void GetMax()
+        {
+            GetMax(bitmap);
         }
 
         void GetLevel()
@@ -189,7 +196,7 @@ namespace ConvertPicToChars2
             fs.Close();
         }
 
-        string GetContent()
+        string GetContent(Bitmap bitmap)
         {
             if (bitmap == null)
             {
@@ -210,7 +217,7 @@ namespace ConvertPicToChars2
 
         private void output_Click(object sender, EventArgs e)
         {
-            Write(GetContent());
+            Write(GetContent(this.bitmap));
             Process.Start(string.Format("{0}\\temp.txt", Application.StartupPath));
         }
 
