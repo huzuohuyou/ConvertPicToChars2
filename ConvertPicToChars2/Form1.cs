@@ -18,11 +18,11 @@ namespace ConvertPicToChars2
         int step = 5;
         int max = 0;
         int level = 0;
-        char[] array = { '#','@','X', 'B','A',
-                         'G','5','A', 'R','9',
-                         '3','S','2', 'd','h',
-                         'i','&','x', 's','r',
-                         'm','z',';', ':','.',
+        char[] array = { '#','M','X', 'B','A',
+                         'G','H','A', 'R','K',
+                         'N','S','Q', 'd','h',
+                         'p','b','x', 's','r',
+                         'o','i',';', ':','.',
                          ' ' };
         private int i;
 
