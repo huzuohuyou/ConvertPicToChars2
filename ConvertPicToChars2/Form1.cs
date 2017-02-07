@@ -18,13 +18,14 @@ namespace ConvertPicToChars2
         int step = 5;
         int max = 0;
         int level = 0;
-        char[] array = { '#','M','X', 'B','A',
-                         'G','H','A', 'R','K',
-                         'N','S','Q', 'd','h',
-                         'p','b','x', 's','r',
-                         'o','i',';', ':','.',
-                         ' ' };
-        private int i;
+        char[] array =
+            //{ '#','M','X', 'B','A',
+            //             'G','H','A', 'R','K',
+            //             'N','S','Q', 'd','h',
+            //             'p','b','x', 's','r',
+            //             'o','i',';', ':','.',
+            //             ' ' };
+         { '#','&','$', '*','o','!',';',' ' };
 
         public Form1()
         {
@@ -113,7 +114,7 @@ namespace ConvertPicToChars2
 
         void GetLevel()
         {
-            level = max / 26;
+            level = max / array.Length;
             // level = 10;
         }
 
