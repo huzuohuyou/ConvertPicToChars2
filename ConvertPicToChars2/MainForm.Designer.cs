@@ -41,6 +41,7 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.pb_origin = new System.Windows.Forms.PictureBox();
             this.pbconverted = new System.Windows.Forms.PictureBox();
+            this.button8 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -77,7 +78,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(495, 7);
+            this.button3.Location = new System.Drawing.Point(571, 7);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 0;
@@ -104,6 +105,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.button8);
             this.splitContainer1.Panel1.Controls.Add(this.button6);
             this.splitContainer1.Panel1.Controls.Add(this.button5);
             this.splitContainer1.Panel1.Controls.Add(this.button7);
@@ -128,7 +130,7 @@
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(75, 23);
             this.button6.TabIndex = 1;
-            this.button6.Text = "run";
+            this.button6.Text = "split";
             this.button6.UseVisualStyleBackColor = true;
             // 
             // button5
@@ -155,7 +157,9 @@
             // 
             // richTextBox1
             // 
+            this.richTextBox1.BackColor = System.Drawing.SystemColors.MenuText;
             this.richTextBox1.Font = new System.Drawing.Font("YouYuan", 5.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.richTextBox1.ForeColor = System.Drawing.Color.Lime;
             this.richTextBox1.Location = new System.Drawing.Point(470, 0);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(799, 640);
@@ -200,6 +204,17 @@
             this.pbconverted.TabIndex = 0;
             this.pbconverted.TabStop = false;
             // 
+            // button8
+            // 
+            this.button8.Font = new System.Drawing.Font("SimSun", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button8.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.button8.Location = new System.Drawing.Point(495, 7);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(75, 23);
+            this.button8.TabIndex = 1;
+            this.button8.Text = "run";
+            this.button8.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -239,6 +254,7 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button button8;
     }
 }
 

@@ -20,6 +20,8 @@ namespace ConvertPicToChars2
         int max = 0;
         int level = 0;
         string imagesDir = Application.StartupPath + "\\frames";
+        List<string> contents = new List<string>();
+
         char[] array =
             //{ '#','M','X', 'B','A',
             //             'G','H','A', 'R','K',
@@ -37,39 +39,48 @@ namespace ConvertPicToChars2
             button3.Click += close_Click;
             button4.Click += output_Click;
             button5.Click += gif_Click;
-            button6.Click += run_Click;
+            button6.Click += split_Click;
             button7.Click += show_Click;
+            button8.Click += run_Clict;
         }
 
-        public delegate void InitItemInvoke(string str);
-
-        void run_Click(object sender, EventArgs e)
+        void run_Clict(object sender, EventArgs e)
         {
             Thread thread = new Thread(new ThreadStart(DoWord));
             thread.Start();
         }
 
-        private void DoWord()
+        public delegate void InitItemInvoke(string str);
+
+        void split_Click(object sender, EventArgs e)
         {
-            Thread.Sleep(41);
-            InitItemInvoke mi = new InitItemInvoke(SetImage);
             DirectoryInfo di = new DirectoryInfo(imagesDir);
             FileInfo[] fi = di.GetFiles();
             foreach (FileInfo item in fi)
             {
-                BeginInvoke(mi, new object[] { item.FullName });
+                Bitmap temp = new Bitmap(item.FullName);
+                GetMax(temp);
+                pbconverted.Image = temp;
+                temp = Convert2(temp);
+                contents.Add(GetContent(temp));
             }
-            
+        }
+
+        private void DoWord()
+        {
+            InitItemInvoke mi = new InitItemInvoke(SetImage);
+            for (int i = 0; i < 1000; i++)
+            {
+                Thread.Sleep(100);
+                int index = i % 4;
+                string view = contents[index];
+                BeginInvoke(mi, new object[] { view });
+            }
         }
 
         private void SetImage(string str)
         {
-            pbconverted.Image = null;
-            Bitmap bitmap = new Bitmap(str);
-            GetMax(bitmap);
-            pbconverted.Image = bitmap;
-            bitmap = Convert2(bitmap);
-            richTextBox1.Text = GetContent(bitmap);
+            richTextBox1.Text = str;
         }
 
         void show_Click(object sender, EventArgs e) {
@@ -160,6 +171,11 @@ namespace ConvertPicToChars2
 
         int GetAvg(int x, int y)
         {
+            return GetAvg(bitmap, x, y);
+        }
+
+        int GetAvg(Bitmap bitmap, int x, int y)
+        {
             if (bitmap == null)
             {
                 throw new Exception("no bitmap exist!");
@@ -180,7 +196,7 @@ namespace ConvertPicToChars2
                     }
                 }
             }
-            return sum / (step*step);
+            return sum / (step * step);
         }
 
         public void Write(string content)
@@ -207,7 +223,7 @@ namespace ConvertPicToChars2
             {
                 for (int i = 0; i < bitmap.Width; i += step)
                 {
-                    char x = GetChar(GetAvg(i, j));
+                    char x = GetChar(GetAvg(bitmap,i, j));
                     content += x + " ";
                 }
                 content += "\r\n";
@@ -221,7 +237,8 @@ namespace ConvertPicToChars2
             Process.Start(string.Format("{0}\\temp.txt", Application.StartupPath));
         }
 
-        void Open() {
+        void Open()
+        {
             OpenFileDialog opnDlg = new OpenFileDialog();//创建OpenFileDialog对象
             //为图像选择一个筛选器
             opnDlg.Filter = "所有图像文件 | *.bmp; *.pcx; *.png; *.jpg; *.gif;" +
@@ -248,7 +265,6 @@ namespace ConvertPicToChars2
         //打开图像
         private void open_Click(object sender, EventArgs e)
         {
-
             Open();
         }
 

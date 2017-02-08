@@ -6,3 +6,4 @@ D:\GitHub\ConvertPicToChars2\ConvertPicToChars2\obj\Debug\ConvertPicToChars2.Pro
 D:\GitHub\ConvertPicToChars2\ConvertPicToChars2\obj\Debug\Pic2Chars.csproj.GenerateResource.Cache
 D:\GitHub\ConvertPicToChars2\ConvertPicToChars2\obj\Debug\ConvertPicToChars2.exe
 D:\GitHub\ConvertPicToChars2\ConvertPicToChars2\obj\Debug\ConvertPicToChars2.pdb
+D:\GitHub\ConvertPicToChars2\ConvertPicToChars2\obj\Debug\Pic2Chars.csprojResolveAssemblyReference.cache
