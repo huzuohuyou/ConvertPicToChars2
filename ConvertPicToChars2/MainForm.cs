@@ -98,6 +98,15 @@ namespace ConvertPicToChars2
                 curFileName = opnDlg.FileName;
                 bitmap = new Bitmap(curFileName);
                 pb_origin.Image = bitmap;
+                if (Directory.Exists(imagesDir))
+                {
+                    DirectoryInfo di = new DirectoryInfo(imagesDir);
+                    FileInfo[] files= di.GetFiles();
+                    foreach (FileInfo item in files)
+                    {
+                        item.Delete();
+                    }
+                }
                 ImageHelper.GetFrames(curFileName, imagesDir);
             }
         }
